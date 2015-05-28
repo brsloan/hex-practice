@@ -1,35 +1,3 @@
-
-function IntProblem(probType, maxNumber) {
-    this.problemType = probType; //"dec" and "hex" currently accepted
-    this.decValue = Math.floor((Math.random() * maxNumber) + 1);
-    this.hexValue = decValue.toString(16);
-
-	//Assign problem/solution values for display
-    switch (this.problemType) {
-        case "dec":
-            this.problem = this.decValue;
-            this.solution = "0x" + this.hexValue.toUpperCase();
-            break;
-        case "hex":
-            this.solution = this.decValue;
-            this.problem = "0x" + this.hexValue.toUpperCase();
-            break;
-		//Maybe add binary/octal options later
-        default:
-            break;
-    }
-
-    this.Grade = function (answer) {
-		//Convert this conditional operator to switch if adding binary/octal options
-		var parsedAnswer = this.problemType == "dec" ? parseInt(answer, 16) : parseInt(answer, 10);
-		
-		if (parsedAnswer == this.decValue) return true;
-        else return false;
-    };
-
-    return this;
-}
-
 var problemText = document.getElementById('problem');
 var submit = document.getElementById('submit');
 var userAnswer = document.getElementById('userAnswer');
@@ -44,27 +12,14 @@ var answersIncorrect = 0;
 
 PrepNewProblem();
 
-submit.onclick = function () {
-    GradeAnswer();
-    PrepNewProblem();
-    return false;
-};
-
-for(i=0;i<probTypes.length; i++)
-{
-	probTypes[i].onclick = PrepNewProblem;
-}
-
-maxValueBox.onchange = PrepNewProblem;
-
 function PrepNewProblem() {
     var problemType = GetProblemType();
     var maxValue = maxValueBox.value;
     userAnswer.value = "";
 	if (parseInt(maxValue))
 	{
-		intProblem = IntProblem(problemType, maxValue);
-		problemText.innerHTML = intProblem.problem;
+		conversionProblem = ConversionProblem(problemType, maxValue);
+		problemText.innerHTML = conversionProblem.problem;
 	}
 	else
 	{
@@ -73,29 +28,68 @@ function PrepNewProblem() {
 	}
 }
 
+function GetProblemType() {
+    for (var i = 0; i < probTypes.length; i++) {
+        if (probTypes[i].checked == true) return probTypes[i].value;
+    }
+}
+
+function ConversionProblem(probType, maxNumber) {
+    this.problemType = probType; //"dec" and "hex" currently accepted
+    this.decValue = Math.floor((Math.random() * maxNumber) + 1);
+    this.hexValue = decValue.toString(16);
+
+    switch (this.problemType) {
+        case "dec":
+            this.problem = this.decValue;
+            this.solution = "0x" + this.hexValue.toUpperCase();
+            this.ParseAnswer = function(answer) {
+              return parseInt(answer, 16);
+            }
+            break;
+        case "hex":
+            this.problem = "0x" + this.hexValue.toUpperCase();
+            this.solution = this.decValue;
+            this.ParseAnswer = function(answer){
+              return parseInt(answer, 10);
+            }
+            break;
+        default: //Maybe add binary/octal options later
+            break;
+    }
+
+    this.Grade = function(answer) {
+		var parsedAnswer = this.ParseAnswer(answer);
+
+		if (parsedAnswer == this.decValue) return true;
+        else return false;
+    };
+
+    return this;
+}
+
+submit.onclick = function () {
+    GradeAnswer();
+    PrepNewProblem();
+    return false;
+};
+
 function GradeAnswer() {
-    if (intProblem.Grade(userAnswer.value)) {
+    if (conversionProblem.Grade(userAnswer.value)) {
         indicator.innerHTML = "Correct!";
         indicator.className = "correct";
         answersCorrect++;
         numCorrectDisplay.innerHTML = answersCorrect;
     } else {
-        indicator.innerHTML = "Incorrect. " + intProblem.problem + " = " + intProblem.solution + ", not \"" + userAnswer.value + "\"";
+        indicator.innerHTML = "Incorrect. " + conversionProblem.problem + " = " + conversionProblem.solution + ", not \"" + userAnswer.value + "\"";
         indicator.className = "incorrect";
         answersIncorrect++;
         numIncorrectDisplay.innerHTML = answersIncorrect;
     }
-	
+
 	var percentCorrect = Math.round((answersCorrect / (answersCorrect + answersIncorrect)) * 100);
 	percentDisplay.innerHTML = percentCorrect  + "%";
 	document.body.style.backgroundColor = getColor(percentCorrect/100);
-}
-
-function GetProblemType() {
-    
-    for (var i = 0; i < probTypes.length; i++) {
-        if (probTypes[i].checked == true) return probTypes[i].value;
-    }
 }
 
 function getColor(value){
@@ -103,3 +97,10 @@ function getColor(value){
     var hue=((value)*120).toString(10);
     return ["hsl(",hue,",95%,80%)"].join("");
 }
+
+for(i=0;i<probTypes.length; i++)
+{
+	probTypes[i].onclick = PrepNewProblem;
+}
+
+maxValueBox.onchange = PrepNewProblem;
