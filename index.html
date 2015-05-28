@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Hexadecimal Practice Problem Generator</title>
+	<meta name="description" content="A simple tool for practicing conversion between decimal and hexadecimal numbering systems. Provides an infinite supply of practice problems with automatic grading. Written in javascript and intended for beginners in programming." />
+	<meta name="keywords" content="Benjamin R Sloan Ben hexadecimal hex decimal base 16 numbering system conversion practice problem generator educational programming" />
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="css/master.css">
+</head>
+<body>
+	<div id="content">
+		<div id="stats">
+			<p>
+				<span id="numCorrectDisplay" class="correct">0</span>:<span id="numIncorrectDisplay" class="incorrect">0</span>
+			</p>
+		</div>
+		<div id="stats2">
+			<p id="percentCorrect">--%</p>
+		</div>
+		
+		<p id="problem">9</p>
+		<form>
+			<input id="userAnswer" type="text" placeholder="Answer?" autocomplete="off">
+			<input id="submit" type="submit" value="Submit">
+			<p id="indicator"></p>
+			<p>Solve From:</p>
+			<input type="radio" name="probType" value="dec" ><span>Decimal</span>
+			<input type="radio" name="probType" value="hex" checked="true"><span>Hexadecimal</span>
+				<p>Max Value:</p>
+				<input type="number" id="maxValue" value="32">
+		</form>
+				<a href="http://en.wikipedia.org/wiki/Hexadecimal">About Hexadecimal</a>
+	</div>
+</body>
+<script src="js/problemGenerator.js"></script>
+</html>

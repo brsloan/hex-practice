@@ -1,0 +1,126 @@
+@charset "utf-8";
+/* CSS Document */
+/*  */
+
+#problem {
+    font-size: 72pt;
+    margin: 0px;
+	margin-top: 16px;
+	text-align: center;
+	width: 100%;
+}
+
+p, span, a {
+	font-family: 'Open-Sans', sans-serif;
+}
+
+form {
+	width: 100%;
+}
+
+#userAnswer{
+	font-size: 36pt;
+	max-width: 97%;
+}
+
+#submit{
+	font-size: 16pt;
+	width: 100%;
+	margin-left: 0px;
+}
+
+#indicator{
+	font-size: 16pt;
+}
+
+input[type="radio"]{
+	margin-left: 10%;
+}
+.incorrect {
+    color: #900;
+}
+.correct {
+    color: green;
+}
+
+#content {
+	display: block;
+	max-width: 250px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 12px;
+}
+
+#stats {
+	display: block;
+	max-width: 150px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 36pt;
+	margin-right: 36pt;
+	line-height: 50%;
+}
+
+#stats2 {
+	display: block;
+	max-width: 150px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 36pt;
+	margin-left: 36pt;
+	line-height: 50%;
+}
+
+#maxValue{
+	width: 100%;
+}
+
+a {
+	display: block;
+	text-align: center;
+	color: black;
+	margin-top: 12pt;
+}
+
+/* Center Placeholder Text in Input Box */
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;  
+}
+
+:-ms-input-placeholder {  
+   text-align: center; 
+}
+
+/***********************Alternative CSS For Mobile***********************/
+
+@media screen and (max-width: 1000px) {
+
+#content {
+	max-width: 100%;
+}
+
+#stats, #stats2 {
+	max-width: 50%;
+	margin: 8px;
+	margin-top: -8px;
+	font-size: 24pt;
+	line-height: 0%;
+}
+
+#userAnswer{
+	max-width: 100%;
+	width: 99%;
+}
+
+}
