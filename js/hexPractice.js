@@ -3,16 +3,16 @@
   var answersIncorrect = 0;
   var conversionProblem;
 
-  PrepNewProblem();
-  AttachEventHandlers();
+  prepNewProblem();
+  attachEventHandlers();
 
-  function PrepNewProblem() {
+  function prepNewProblem() {
     var maxValueBox = document.getElementById('maxValue'),
      userAnswer = document.getElementById('userAnswer'),
      problemText = document.getElementById('problem'),
      indicator = document.getElementById('indicator'),
      maxValue = maxValueBox.value,
-     problemType = GetProblemType();
+     problemType = getProblemType();
 
     if (parseInt(maxValue))
   	{
@@ -27,21 +27,21 @@
   	}
   }
 
-  function GetProblemType() {
+  function getProblemType() {
       var probTypes = document.getElementsByName('probType');
       for (var i = 0, len = probTypes.length; i < len; i++) {
           if (probTypes[i].checked == true) return probTypes[i].value;
       }
   }
 
-  function AttachEventHandlers(){
-    var probTypes = document.getElementsByName('probType');
-    var submit = document.getElementById('submit');
-    var maxValueBox = document.getElementById('maxValue');
+  function attachEventHandlers(){
+    var probTypes = document.getElementsByName('probType'),
+      submit = document.getElementById('submit'),
+      maxValueBox = document.getElementById('maxValue');
 
     submit.onclick = function () {
-        SubmitAnswer();
-        PrepNewProblem();
+        submitAnswer();
+        prepNewProblem();
         return false;
     };
 
@@ -53,22 +53,22 @@
     maxValueBox.onchange = PrepNewProblem;
   }
 
-  function SubmitAnswer(){
-    var userAnswer = document.getElementById('userAnswer');
-    var answerIsCorrect = conversionProblem.checkAnswer(userAnswer.value);
-    ShowAnswerResult(answerIsCorrect);
+  function submitAnswer(){
+    var userAnswer = document.getElementById('userAnswer'),
+      answerIsCorrect = conversionProblem.checkAnswer(userAnswer.value);
+    showAnswerResult(answerIsCorrect);
   }
 
-  function ShowAnswerResult(answerIsCorrect) {
+  function showAnswerResult(answerIsCorrect) {
       if (answerIsCorrect) {
-          IndicateCorrectAnswer();
+          indicateCorrectAnswer();
       } else {
-          IndicateIncorrectAnswer();
+          indicateIncorrectAnswer();
       }
-      UpdatePercentCorrect();
+      updatePercentCorrect();
   }
 
-  function IndicateCorrectAnswer(){
+  function indicateCorrectAnswer(){
     var indicator = document.getElementById('indicator');
     var numCorrectDisplay = document.getElementById('numCorrectDisplay');
     indicator.innerHTML = "Correct!";
@@ -77,7 +77,7 @@
     numCorrectDisplay.innerHTML = answersCorrect;
   }
 
-  function IndicateIncorrectAnswer(){
+  function indicateIncorrectAnswer(){
     var indicator = document.getElementById('indicator');
     var numIncorrectDisplay = document.getElementById('numIncorrectDisplay');
     var userAnswer = document.getElementById('userAnswer').value;
@@ -87,7 +87,7 @@
     numIncorrectDisplay.innerHTML = answersIncorrect;
   }
 
-  function UpdatePercentCorrect(){
+  function updatePercentCorrect(){
     var percentDisplay = document.getElementById('percentCorrect');
     var percentCorrect = Math.round((answersCorrect / (answersCorrect + answersIncorrect)) * 100);
   	percentDisplay.innerHTML = percentCorrect  + "%";
@@ -96,7 +96,7 @@
 
   function getColor(value){
       //value from 0 to 1
-      var hue=((value)*120).toString(10);
+      var hue = ((value)*120).toString(10);
       return ["hsl(",hue,",95%,80%)"].join("");
   }
 })();

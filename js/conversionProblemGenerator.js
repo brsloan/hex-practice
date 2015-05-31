@@ -1,15 +1,4 @@
 var ConversionProblemGenerator = (function(){
-  function RandomNumber(maxNumber) {
-      this.decValue = Math.floor((Math.random() * maxNumber) + 1);
-      this.hexValue = this.decValue.toString(16);
-      this.checkIfEqual = function(intToCheck) {
-        if (intToCheck == this.decValue)
-          return true;
-        else
-          return false;
-      }
-  }
-
   function HexProblem(maxNumber){
     this.generatedNumber = new RandomNumber(maxNumber);
     this.getProblem = function() {
@@ -36,6 +25,17 @@ var ConversionProblemGenerator = (function(){
       var parsedAnswer = parseInt(answer, 16);
       return this.generatedNumber.checkIfEqual(parsedAnswer);
     }
+  }
+
+  function RandomNumber(maxNumber) {
+      this.decValue = Math.floor((Math.random() * maxNumber) + 1);
+      this.hexValue = this.decValue.toString(16);
+      this.checkIfEqual = function(intToCheck) {
+        if (intToCheck == this.decValue)
+          return true;
+        else
+          return false;
+      }
   }
 
   return {
