@@ -47,10 +47,10 @@
 
     for(i=0, len = probTypes.length; i<len; i++)
     {
-    	probTypes[i].onclick = PrepNewProblem;
+    	probTypes[i].onclick = prepNewProblem;
     }
 
-    maxValueBox.onchange = PrepNewProblem;
+    maxValueBox.onchange = prepNewProblem;
   }
 
   function submitAnswer(){
