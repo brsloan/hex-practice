@@ -1,24 +1,22 @@
-var problemText = document.getElementById('problem');
-var submit = document.getElementById('submit');
-var userAnswer = document.getElementById('userAnswer');
-var indicator = document.getElementById('indicator');
-var numCorrectDisplay = document.getElementById('numCorrectDisplay');
-var numIncorrectDisplay = document.getElementById('numIncorrectDisplay');
-var percentDisplay = document.getElementById('percentCorrect');
-var maxValueBox = document.getElementById('maxValue');
-var probTypes = document.getElementsByName('probType');
 var answersCorrect = 0;
 var answersIncorrect = 0;
+var conversionProblem;
 
 PrepNewProblem();
+AttachEventHandlers();
 
 function PrepNewProblem() {
-    var problemType = GetProblemType();
-    var maxValue = maxValueBox.value;
-    userAnswer.value = "";
-	if (parseInt(maxValue))
+  var maxValueBox = document.getElementById('maxValue'),
+   userAnswer = document.getElementById('userAnswer'),
+   problemText = document.getElementById('problem'),
+   indicator = document.getElementById('indicator'),
+   maxValue = maxValueBox.value,
+   problemType = GetProblemType();
+
+  if (parseInt(maxValue))
 	{
-		conversionProblem = ConversionProblem(problemType, maxValue);
+    userAnswer.value = "";
+		conversionProblem = new ConversionProblem(problemType, maxValue);
 		problemText.innerHTML = conversionProblem.problem;
 	}
 	else
@@ -29,6 +27,7 @@ function PrepNewProblem() {
 }
 
 function GetProblemType() {
+    var probTypes = document.getElementsByName('probType');
     for (var i = 0; i < probTypes.length; i++) {
         if (probTypes[i].checked == true) return probTypes[i].value;
     }
@@ -37,7 +36,7 @@ function GetProblemType() {
 function ConversionProblem(probType, maxNumber) {
     this.problemType = probType; //"dec" and "hex" currently accepted
     this.decValue = Math.floor((Math.random() * maxNumber) + 1);
-    this.hexValue = decValue.toString(16);
+    this.hexValue = this.decValue.toString(16);
 
     switch (this.problemType) {
         case "dec":
@@ -55,39 +54,76 @@ function ConversionProblem(probType, maxNumber) {
             }
             break;
         default: //Maybe add binary/octal options later
+            throw new Error('ConversionProblem(): You must provide a problem type of "hex" or "dec".');
             break;
     }
 
-    this.Grade = function(answer) {
-		var parsedAnswer = this.ParseAnswer(answer);
+    this.CheckAnswer = function(answer) {
+		    var parsedAnswer = this.ParseAnswer(answer);
 
-		if (parsedAnswer == this.decValue) return true;
-        else return false;
+	      if (parsedAnswer == this.decValue)
+          return true;
+        else
+          return false;
     };
-
-    return this;
 }
 
-submit.onclick = function () {
-    GradeAnswer();
-    PrepNewProblem();
-    return false;
-};
+function AttachEventHandlers(){
+  var probTypes = document.getElementsByName('probType');
+  var submit = document.getElementById('submit');
+  var maxValueBox = document.getElementById('maxValue');
 
-function GradeAnswer() {
-    if (conversionProblem.Grade(userAnswer.value)) {
-        indicator.innerHTML = "Correct!";
-        indicator.className = "correct";
-        answersCorrect++;
-        numCorrectDisplay.innerHTML = answersCorrect;
+  submit.onclick = function () {
+      SubmitAnswer();
+      PrepNewProblem();
+      return false;
+  };
+
+  for(i=0;i<probTypes.length; i++)
+  {
+  	probTypes[i].onclick = PrepNewProblem;
+  }
+
+  maxValueBox.onchange = PrepNewProblem;
+}
+
+function SubmitAnswer(){
+  var userAnswer = document.getElementById('userAnswer');
+  var answerIsCorrect = conversionProblem.CheckAnswer(userAnswer.value);
+  ShowAnswerResult(answerIsCorrect);
+}
+
+function ShowAnswerResult(answerIsCorrect) {
+    if (answerIsCorrect) {
+        IndicateCorrectAnswer();
     } else {
-        indicator.innerHTML = "Incorrect. " + conversionProblem.problem + " = " + conversionProblem.solution + ", not \"" + userAnswer.value + "\"";
-        indicator.className = "incorrect";
-        answersIncorrect++;
-        numIncorrectDisplay.innerHTML = answersIncorrect;
+        IndicateIncorrectAnswer();
     }
+    UpdatePercentCorrect();
+}
 
-	var percentCorrect = Math.round((answersCorrect / (answersCorrect + answersIncorrect)) * 100);
+function IndicateCorrectAnswer(){
+  var indicator = document.getElementById('indicator');
+  var numCorrectDisplay = document.getElementById('numCorrectDisplay');
+  indicator.innerHTML = "Correct!";
+  indicator.className = "correct";
+  answersCorrect++;
+  numCorrectDisplay.innerHTML = answersCorrect;
+}
+
+function IndicateIncorrectAnswer(){
+  var indicator = document.getElementById('indicator');
+  var numIncorrectDisplay = document.getElementById('numIncorrectDisplay');
+  var userAnswer = document.getElementById('userAnswer').value;
+  indicator.innerHTML = "Incorrect. " + conversionProblem.problem + " = " + conversionProblem.solution + ", not \"" + userAnswer + "\"";
+  indicator.className = "incorrect";
+  answersIncorrect++;
+  numIncorrectDisplay.innerHTML = answersIncorrect;
+}
+
+function UpdatePercentCorrect(){
+  var percentDisplay = document.getElementById('percentCorrect');
+  var percentCorrect = Math.round((answersCorrect / (answersCorrect + answersIncorrect)) * 100);
 	percentDisplay.innerHTML = percentCorrect  + "%";
 	document.body.style.backgroundColor = getColor(percentCorrect/100);
 }
@@ -97,10 +133,3 @@ function getColor(value){
     var hue=((value)*120).toString(10);
     return ["hsl(",hue,",95%,80%)"].join("");
 }
-
-for(i=0;i<probTypes.length; i++)
-{
-	probTypes[i].onclick = PrepNewProblem;
-}
-
-maxValueBox.onchange = PrepNewProblem;
