@@ -12,17 +12,22 @@
      problemText = document.getElementById('problem'),
      indicator = document.getElementById('indicator'),
      maxValue = maxValueBox.value,
-     problemType = getProblemType();
+     problemType = getProblemType(),
+     errorMessage = "You must enter an integer for Max Value.";
 
     if (parseInt(maxValue))
   	{
       userAnswer.value = "";
   		conversionProblem = problemType == 'hex' ? ConversionProblemGenerator.getHexProblem(maxValue) : ConversionProblemGenerator.getDecProblem(maxValue);
   		problemText.innerHTML = conversionProblem.getProblem();
+      if (indicator.innerHTML == errorMessage)
+      {
+        indicator.innerHTML = "";
+      }
   	}
   	else
   	{
-  		indicator.innerHTML = "You must enter an integer for Max Value.";
+  		indicator.innerHTML = errorMessage;
   		indicator.className = "incorrect";
   	}
   }
